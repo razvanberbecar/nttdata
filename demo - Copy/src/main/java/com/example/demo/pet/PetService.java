@@ -27,7 +27,11 @@ public class PetService {
     }
 
     public List<Pet> getPetsSortedBy(String field){
-        return petRepository.findAllSorted(Sort.by(field));
+        String[] parts = field.split(",");
+        Sort.Direction direction = parts.length > 1 && "desc".equalsIgnoreCase(parts[1])
+            ? Sort.Direction.DESC
+            : Sort.Direction.ASC;
+        return petRepository.findAllSorted(Sort.by(direction, parts[0]));
     }
 
     public void addNewPet(Pet pet) {
